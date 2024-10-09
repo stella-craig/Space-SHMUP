@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class Hero : MonoBehaviour
@@ -14,7 +13,7 @@ public class Hero : MonoBehaviour
     public float pitchMult = 30;
 
     [Header("Dynamic")][Range(0,4)]
-    pubic float shieldLevel = 1;
+    public float shieldLevel = 1;
 
     void Awake()
     {
@@ -34,6 +33,13 @@ public class Hero : MonoBehaviour
         float vAxis = Input.GetAxis("Vertical");
 
         // Change transform.position based on the axes
+        Vector3 pos = transform.position;
+        pos.x += hAxis * speed * Time.deltaTime;
+        pos.y += vAxis * speed * Time.deltaTime;
+        transform.position = pos;
+
+        // Rotate the ship to make it feel more dynamic
+        transform.rotation = Quaternion.Euler(vAxis*pitchMult, hAxis*rollMult, 0);
     }
 
 }
