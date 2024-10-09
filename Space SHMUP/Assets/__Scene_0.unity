@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 242745756}
   - component: {fileID: 242745755}
   - component: {fileID: 242745754}
+  - component: {fileID: 242745757}
   m_Layer: 0
   m_Name: _Hero
   m_TagString: Untagged
@@ -190,6 +191,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &242745757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242745753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ce28d4d8cf2e8c4198bdb010d818dd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boundsType: 1
+  radius: 4
+  camWidth: 0
+  camHeight: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +348,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bad7ca65a8bdc2e41a63bd7d1765ca64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotationsPerSecond: 0.01
+  levelShown: 0
 --- !u!135 &711257440
 SphereCollider:
   m_ObjectHideFlags: 0
