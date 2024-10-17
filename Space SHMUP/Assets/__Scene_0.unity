@@ -173,7 +173,9 @@ MonoBehaviour:
   speed: 30
   rollMult: -45
   pitchMult: 30
-  _shieldLevel: 1
+  projectilePrefab: {fileID: 596368595593112413, guid: 0b60f9e1fa0167641a14e096ae2c93dc, type: 3}
+  projectileSpeed: 40
+  _shieldLevel: 4
 --- !u!4 &242745756
 Transform:
   m_ObjectHideFlags: 0
@@ -517,6 +519,7 @@ MonoBehaviour:
   - {fileID: 461487522237648551, guid: a96256c21ef867242b86dfa633d9c431, type: 3}
   enemySpawnPerSecond: 0.5
   enemyInsetDefault: 1.5
+  gameRestartDelay: 2
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
