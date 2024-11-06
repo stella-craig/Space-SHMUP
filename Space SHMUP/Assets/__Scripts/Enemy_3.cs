@@ -60,7 +60,7 @@ public class Enemy_3 : Enemy
         transform.rotation = Quaternion.Euler(u * 180, 0, 0);
 
         // Interpolate the three Bezier curve points
-        // u = u - 0.1f * Mathf.Sin(u * Mathf.PI * 2);
+        u = u - 0.1f * Mathf.Sin(u * Mathf.PI * 2);
         pos = Utils.Bezier(u, points);
 
         // Enemy_3 does not call base.Move()

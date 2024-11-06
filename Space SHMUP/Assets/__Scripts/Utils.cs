@@ -17,11 +17,11 @@ public class Utils : MonoBehaviour
     {
         // Set up the array
         Vector3[,] vArr = new Vector3[points.Length, points.Length];
-        // Fill the last row of vArr with the elements of vList
+        // Fill the last row of vArr with the elements of points
         int r = points.Length - 1;
         for (int c = 0; c<points.Length; c++)
         {
-            vArr[r, c] = vList[c];
+            vArr[r, c] = points[c];
         }
 
         // Interate over all remaining rows and interpolate points at each one

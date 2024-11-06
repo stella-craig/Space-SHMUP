@@ -99,6 +99,11 @@ MonoBehaviour:
   fireRate: 0.3
   health: 10
   score: 100
+  lifeTime: 5
+  midpointYRange: {x: 1.5, y: 3}
+  drawDebugInfo: 0
+  points: []
+  birthTime: 0
 --- !u!1001 &6217192625199160741
 PrefabInstance:
   m_ObjectHideFlags: 0
