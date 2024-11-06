@@ -9,10 +9,13 @@ public class Enemy_2 : Enemy
     // Enemy_2 uses a Sine wave to modify a 2-point linear interpolation
     [Tooltip("Determins how much the Sine wave will ease the interpolation")]
     public float sinEccentricity = 0.6f;
+    public AnimationCurve rotCurve;
 
     [Header("Enemy_2 Private Fields")]
     [SerializeField] private float birthTime; // Interpolation start time
     [SerializeField] private Vector3 p0, p1; // Lerp_points
+
+    private Quaternion baseRotation;
 
     private void Start()
     {
@@ -37,13 +40,39 @@ public class Enemy_2 : Enemy
 
         // Set the birthTime to the current time
         birthTime = Time.time;
+
+        // Set up the initial ship rotation
+        transform.position = p0;
+        transform.LookAt(p1, Vector3.back);
+        baseRotation = transform.rotation;
     }
 
     public override void Move()
     {
-        
+        // Linear interpolation work based on a u value between 0 & 1
+        float u = (Time.time - birthTime) / lifeTime;
 
+        // If u>1, then it has been longer than lifeTime since birthTime
+        if (u > 1)
+        {
+            // This Enemy_2 has finished its life
+            Destroy(this.gameObject);
+            return;
+        }
 
+        // Use the AnimationCurve to set the rotation about Y
+        float shipRot = rotCurve.Evaluate(u) * 360;
+        // if (p0.x > p1.x) shipRot = -shipRot;
+        // transform.rotation = Quaternion.Euler(0, shipRot, 0);
+        transform.rotation = baseRotation * Quaternion.Euler(-shipRot, 0, 0);
+
+        // Adjust u by adding a U curve based on a Sine wave
+        u = u + sinEccentricity * (Mathf.Sin(u * Mathf.PI * 2));
+
+        // Interpolate the two linear interpolation points
+        pos = (1 - u) * p0 + u * p1;
+
+        // Note that Enemy_2 does NOT call the base.Move() method
 
 
     }
