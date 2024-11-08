@@ -815,11 +815,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: ca4277e6-429d-4a0c-adf0-0d0f9b05c685
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Space SHMUP 2024-11-07_23-47-15
+  organizationId: stellacraig
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
