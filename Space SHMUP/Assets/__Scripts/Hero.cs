@@ -41,6 +41,8 @@ public class Hero : MonoBehaviour
 
         // Reset the weapons to start _Hero with 1 blaster
         ClearWeapons();
+        // THIS IS WHERE WE ARE DOING TESTING FOR THE GUNS
+        // SET BACK TO BLASTER WHEN DONE TESTING
         weapons[0].SetType(eWeaponType.blaster);
     }
 

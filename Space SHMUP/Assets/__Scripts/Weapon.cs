@@ -17,7 +17,8 @@ public enum eWeaponType
     missile,    // [NI] Homing missiles
 
     laser,     // [NI] Damage over time
-    shield      // Raise shieldLevel
+    shield,      // Raise shieldLevel
+    swivel  // acts like blaster but shoots nearest enemy with lower damage
 }
 
 /// <summary>
@@ -138,6 +139,34 @@ public class Weapon : MonoBehaviour
                 p = MakeProjectile();
                 p.transform.rotation = Quaternion.AngleAxis(-10, Vector3.back);
                 p.vel = p.transform.rotation * vel;
+                break;
+
+            // Shoots two projectiles that move in a sin wave pattern, similar to the movement of Enemy_1
+            case eWeaponType.phaser:
+                p = MakeProjectile();
+                p.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
+                p.vel = p.transform.rotation * vel;
+                p = MakeProjectile();
+                p.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
+                p.vel = p.transform.rotation * vel;
+                break;
+
+            // Instead of doing all of its damage at once, the laser does continuous damage over time
+            case eWeaponType.laser:
+                p = MakeProjectile();
+                p.vel = vel;
+                break;
+
+            // Missile has a lock-on mechanic that could track enemies and always hit
+            case eWeaponType.missile:
+                p = MakeProjectile();
+                p.vel = vel;
+                break;
+
+            // Like the blaster but actually shoots at the nearest enemy. However, the damage would be really low
+            case eWeaponType.swivel:
+                p = MakeProjectile();
+                p.vel = vel;
                 break;
         }
 
