@@ -18,7 +18,7 @@ public enum eWeaponType
 
     laser,     // [NI] Damage over time
     shield,      // Raise shieldLevel
-    swivel  // acts like blaster but shoots nearest enemy with lower damage
+    swivel  // [NI] acts like blaster but shoots nearest enemy with lower damage
 }
 
 /// <summary>
@@ -65,8 +65,16 @@ public class Weapon : MonoBehaviour
     private GameObject weaponModel;
     private Transform shotPointTrans;
 
+    private bool laserActive = false;
+    private LineRenderer lineRenderer; // For visualizing the laser
+
     private void Start()
     {
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startColor = Color.red;
+
         // Set up PROJECTILE_ANCHOR if it has not already been done
         if (PROJECTILE_ANCHOR == null)
         {
@@ -96,6 +104,11 @@ public class Weapon : MonoBehaviour
         if(type == eWeaponType.none)
         {
             this.gameObject.SetActive(false);
+            if (laserActive)
+            {
+                laserActive = false;
+                if (lineRenderer != null) lineRenderer.enabled = false;
+            }
             return;
         }
         else
@@ -143,18 +156,35 @@ public class Weapon : MonoBehaviour
 
             // Shoots two projectiles that move in a sin wave pattern, similar to the movement of Enemy_1
             case eWeaponType.phaser:
+                //p = MakeProjectile();
+                //p.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
+                //p.vel = p.transform.rotation * vel;
+                //p = MakeProjectile();
+                //p.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
+                //p.vel = p.transform.rotation * vel;
+                //break;
+
+                float frequency = 20f; // Higher frequency for faster oscillation
+                float amplitude = 100f;  // Horizontal amplitude of the wave
+
+                // Create the first projectile
                 p = MakeProjectile();
-                p.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
-                p.vel = p.transform.rotation * vel;
+                p.vel = vel; // Forward velocity
+                StartCoroutine(MoveInSineWave(p, frequency, amplitude, 1)); // 1 for positive direction
+
+                // Create the second projectile
                 p = MakeProjectile();
-                p.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
-                p.vel = p.transform.rotation * vel;
+                p.vel = vel; // Forward velocity
+                StartCoroutine(MoveInSineWave(p, frequency, amplitude, -1)); // -1 for negative direction
                 break;
 
             // Instead of doing all of its damage at once, the laser does continuous damage over time
             case eWeaponType.laser:
-                p = MakeProjectile();
-                p.vel = vel;
+                if (!laserActive)
+                {
+                    laserActive = true;
+                    StartCoroutine(FireLaser());
+                }
                 break;
 
             // Missile has a lock-on mechanic that could track enemies and always hit
@@ -187,6 +217,82 @@ public class Weapon : MonoBehaviour
         return (p);
     }
 
+
+    private IEnumerator MoveInSineWave(ProjectileHero projectile, float frequency, float amplitude, int direction)
+    {
+        float birthTime = Time.time; // Track when the projectile was created
+
+        while (projectile != null && projectile.gameObject.activeInHierarchy)
+        {
+            // Calculate time elapsed since the projectile's creation
+            float age = Time.time - birthTime;
+
+            // Compute the sine wave offset
+            float offsetX = Mathf.Sin(age * frequency) * amplitude * direction;
+
+            // Update the projectile's position
+            Vector3 pos = projectile.transform.position;
+            pos.x += offsetX * Time.deltaTime;
+            projectile.transform.position = pos;
+
+            yield return null; // Wait for the next frame
+        }
+    }
+
+
+    private IEnumerator FireLaser()
+    {
+        lineRenderer.enabled = true;
+
+        while (laserActive)
+        {
+            if (Input.GetAxis("Jump") != 1)
+            {
+                Debug.Log("Space released");
+                break;
+            }
+            else if (Input.touchCount < 2 && Input.touchCount > 0)
+            {
+                Debug.Log("Touch removed");
+                break;
+            }
+
+            // Start the laser at the weapon's position
+            lineRenderer.SetPosition(0, shotPointTrans.position);
+
+            // Always fire the laser straight up
+            RaycastHit hit;
+            int layerMask = ~LayerMask.GetMask("ProjectileHero", "PowerUp"); // Exclude projectiles and powerups
+            if (Physics.Raycast(shotPointTrans.position, Vector3.up, out hit, 100f, layerMask))
+            {
+                lineRenderer.SetPosition(1, hit.point);
+
+                // Deal damage to enemy
+                Enemy e = hit.collider.GetComponent<Enemy>();
+                if (e != null)
+                {
+                    e.TakeDamage(def.damagerPerSec * Time.deltaTime);
+
+                    // Trigger blink effect
+                    BlinkColorOnHit blink = e.GetComponent<BlinkColorOnHit>();
+                    if (blink != null)
+                    {
+                        blink.HitByLaser();
+                    }
+                }
+            }
+            else
+            {
+                lineRenderer.SetPosition(1, shotPointTrans.position + Vector3.up * 100f);
+            }
+
+            yield return null; // Wait until the next frame
+        }
+
+        // Disable the laser when no longer active
+        lineRenderer.enabled = false;
+        laserActive = false;
+    }
 
 
 

@@ -109,4 +109,19 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            if (!calledShipDestroyed)
+            {
+                calledShipDestroyed = true;
+                Main.SHIP_DESTROYED(this);
+            }
+            Destroy(gameObject); // Destroy this Enemy
+        }
+    }
+
+
 }

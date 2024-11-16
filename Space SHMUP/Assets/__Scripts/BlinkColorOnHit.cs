@@ -41,7 +41,7 @@ public class BlinkColorOnHit : MonoBehaviour
 
         // Check for collisions with ProjectileHero
         ProjectileHero p = coll.gameObject.GetComponent<ProjectileHero>();
-        if(p!= null)
+        if (p!= null)
         {
             if(bndCheck != null && !bndCheck.isOnScreen)
             {
@@ -49,6 +49,15 @@ public class BlinkColorOnHit : MonoBehaviour
             }
             SetColors();
         }
+    }
+
+    /// <summary>
+    /// This method is called externally by the laser to indicate a hit.
+    /// </summary>
+    public void HitByLaser()
+    {
+        if (bndCheck != null && !bndCheck.isOnScreen) return; // Ignore if off-screen
+        SetColors();
     }
 
     /// <summary>

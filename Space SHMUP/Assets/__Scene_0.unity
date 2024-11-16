@@ -805,13 +805,13 @@ MonoBehaviour:
   - type: 5
     letter: L
     powerUpColor: {r: 0.990566, g: 0.38601696, b: 0.38002843, a: 1}
-    weaponModelPrefab: {fileID: 0}
-    projectilePrefab: {fileID: 0}
+    weaponModelPrefab: {fileID: 919132149155446097, guid: 0522e2d6add5631469273543744ebf7f, type: 3}
+    projectilePrefab: {fileID: 596368595593112413, guid: 0b60f9e1fa0167641a14e096ae2c93dc, type: 3}
     projectileColor: {r: 0.9921569, g: 0.38431376, b: 0.3803922, a: 1}
     damageOnHit: 0
-    damagerPerSec: 0
+    damagerPerSec: 10
     delayBetweenShots: 0
-    velocity: 50
+    velocity: 0
   - type: 4
     letter: M
     powerUpColor: {r: 0.54509807, g: 0.2627451, b: 0.7411765, a: 1}
@@ -891,7 +891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4149a0205e560ad4ebfa4d43a1829276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 1
+  _type: 5
   def:
     type: 0
     letter: 
@@ -1384,7 +1384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -355.10004
+      value: -327.54
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
