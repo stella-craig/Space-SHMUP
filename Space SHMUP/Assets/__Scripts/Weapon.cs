@@ -156,14 +156,6 @@ public class Weapon : MonoBehaviour
 
             // Shoots two projectiles that move in a sin wave pattern, similar to the movement of Enemy_1
             case eWeaponType.phaser:
-                //p = MakeProjectile();
-                //p.transform.rotation = Quaternion.AngleAxis(5, Vector3.back);
-                //p.vel = p.transform.rotation * vel;
-                //p = MakeProjectile();
-                //p.transform.rotation = Quaternion.AngleAxis(-5, Vector3.back);
-                //p.vel = p.transform.rotation * vel;
-                //break;
-
                 float frequency = 20f; // Higher frequency for faster oscillation
                 float amplitude = 100f;  // Horizontal amplitude of the wave
 
@@ -190,13 +182,38 @@ public class Weapon : MonoBehaviour
             // Missile has a lock-on mechanic that could track enemies and always hit
             case eWeaponType.missile:
                 p = MakeProjectile();
-                p.vel = vel;
+                GameObject nearestEnemy = FindNearestEnemy();
+                if (nearestEnemy != null)
+                {
+                    // Enable homing and set the target
+                    p.homingEnabled = true;
+                    p.target = nearestEnemy.transform;
+
+                    // Set initial velocity and rotation
+                    Vector3 direction = (nearestEnemy.transform.position - p.transform.position).normalized;
+                    p.vel = direction * def.velocity;
+                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    p.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90));
+                }
+                else
+                {
+                    // If no target is found, fire straight
+                    p.homingEnabled = false;
+                    p.target = null;
+                    p.vel = Vector3.up * def.velocity;
+                    p.transform.rotation = Quaternion.identity;
+                }
                 break;
 
             // Like the blaster but actually shoots at the nearest enemy. However, the damage would be really low
             case eWeaponType.swivel:
-                p = MakeProjectile();
-                p.vel = vel;
+                GameObject target = FindNearestEnemy();
+                if (target != null)
+                {
+                    p = MakeProjectile();
+                    Vector3 dir = (target.transform.position - p.transform.position).normalized;
+                    p.vel = dir * def.velocity;
+                }
                 break;
         }
 
@@ -294,6 +311,26 @@ public class Weapon : MonoBehaviour
         laserActive = false;
     }
 
+    private GameObject FindNearestEnemy()
+    {
+        // Get all enemies currently active in the scene
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        GameObject nearestEnemy = null;
+        float closestDistance = float.MaxValue; // Start with a very large distance
+
+        // Loop through each enemy to find the nearest one
+        foreach (Enemy enemy in enemies)
+        {
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                nearestEnemy = enemy.gameObject;
+            }
+        }
+
+        return nearestEnemy;
+    }
 
 
 
