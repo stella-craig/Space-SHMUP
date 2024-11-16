@@ -1,2 +1,15 @@
-# Space SHMUP
- Created for my Game Development class. The prototype is from the textbook Introduction to Game Design, Prototyping, and Development Third Edition by Jeremy Gibson Bond.
+# **Space SHMUP**
+
+> Game Dev Assignment: A space-themed shoot 'em up game developed in Unity, where the player focuses on shooting enemies while dodging their attacks.
+
+
+
+
+
+
+
+
+
+
+
+
